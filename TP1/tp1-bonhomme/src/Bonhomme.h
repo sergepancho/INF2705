@@ -48,11 +48,12 @@ public:
         delete cylindre;
     }
 
-    void initVar() { position = glm::vec3(0.0, 0.0, 2.0); taille = 0.5; angleCorps = angleAile = angleJambe = 0.0; }
+    void initVar() { position = glm::vec3(0.0, 0.0, 2.0); taille = 0.5; angleCorps = angleAile = angleJambe =angleTete= 0.0;axeTete = glm::vec3(0.0, 0.0, 1.0) ;angleTete=45;}
     void verifierAngles() // vérifier que les angles ne débordent pas les valeurs permises
     {
         if ( angleJambe > 90.0 ) angleJambe = 90.0; else if ( angleJambe < 0.0 ) angleJambe = 0.0;
         if ( angleAile > 90.0 ) angleAile = 90.0; else if ( angleAile < 0.0 ) angleAile = 0.0;
+        //if ( angleTete > 90.0 ) angleTete = 90.0; else if (ngleTete < 0.0 ) ngleTete = 0.0;
     }
 
     void initialiserGraphique()
@@ -172,6 +173,7 @@ public:
             {
             default:
             case 1: // une sphère
+                matrModel.Rotate(angleTete,axeTete.x,axeTete.y,axeTete.z);
 				matrModel.Translate( 0.0, 0.0, taille ); // (bidon) À MODIFIER //====
 				matrModel.Scale(taille, taille, taille);
                 glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel );
@@ -179,6 +181,7 @@ public:
                 break;
 
             case 2: // la théière
+                matrModel.Rotate(angleTete,axeTete.x,axeTete.y,axeTete.z);
 				matrModel.Translate(0.0, 0.0, 0.0); 
 				matrModel.Rotate(90.0, 1.0, 0.0, 0.0);
 				matrModel.Scale( 0.45*taille, 0.45*taille, 0.45*taille);
@@ -301,18 +304,21 @@ public:
             static int sens[6] = { +1, +1, +1, +1, +1, +1 };
             glm::vec3 vitesse( 0.03, 0.02, 0.05 );
             // mouvement en X
-            if ( position.x-taille <= -0.5*Etat::dimBoite ) sens[0] = +1.0;
-            else if ( position.x+taille >= 0.5*Etat::dimBoite ) sens[0] = -1.0;
+            if ( position.x-taille <= -0.5*Etat::dimBoite ) {sens[0] = +1.0;angleTete=abs(angleTete);}
+            else if ( position.x+taille >= 0.5*Etat::dimBoite ) {sens[0] = -1.0;angleTete=-abs(angleTete);}
             position.x += vitesse.x * sens[0];
+            //axeTete.y=1;axeTete.x=0;axeTete.z=0;
+            
             // mouvement en Y
-            if ( position.y-taille <= -0.5*Etat::dimBoite ) sens[1] = +1.0;
-            else if ( position.y+taille >= 0.5*Etat::dimBoite ) sens[1] = -1.0;
+            if ( position.y-taille <= -0.5*Etat::dimBoite ) {sens[1] = +1.0;angleTete=abs(angleTete);}
+            else if ( position.y+taille >= 0.5*Etat::dimBoite ) {sens[1] = -1.0;angleTete=-abs(angleTete);}
             position.y += vitesse.y * sens[1];
+           // axeTete.y=0;axeTete.x=1;axeTete.z=0;
             // mouvement en Z
-            if ( position.z-taille <= 0.0 ) sens[2] = +1.0;
-            else if ( position.z+taille >= Etat::dimBoite ) sens[2] = -1.0;
+            if ( position.z-taille <= 0.0 ) {sens[2] = +1.0;angleTete=abs(angleTete);}
+            else if ( position.z+taille >= Etat::dimBoite ) {sens[2] = -1.0;angleTete=-abs(angleTete);}
             position.z += vitesse.z * sens[2];
-
+            //axeTete.y=1;axeTete.x=0;axeTete.z=0;
             // angle des jambes et des ailes
             if ( angleJambe <= 0.0 ) sens[3] = +1.0;
             else if ( angleJambe >= 90.0 ) sens[3] = -1.0;
@@ -328,7 +334,8 @@ public:
 
             // rotation du corps
             if ( angleCorps > 360.0 ) angleCorps -= 360.0;
-            angleCorps += 0.35;
+              // angleCorps += 0.35;
+              // angleTete+=0.35; pour faire tourner la tete 
         }
     }
 
@@ -344,6 +351,8 @@ public:
     GLfloat angleCorps;       // angle de rotation (en degrés) du bonhomme
     GLfloat angleAile;        // angle de rotation (en degrés) des ailes
     GLfloat angleJambe;       // angle de rotation (en degrés) des jambes
+    GLfloat angleTete;       // angle de rotation (en degrés) de la tete
+    glm::vec3 axeTete;       // axe de rotation de la tete
     const GLfloat longMembre = 0.7;  // longueur des membres
     const GLfloat largMembre = 0.1;  // largeur des membres
 };
