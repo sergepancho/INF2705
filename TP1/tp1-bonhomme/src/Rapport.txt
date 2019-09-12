@@ -5,7 +5,17 @@ Q1: Supposons que les coordonnées du modèle soient exprimées dans un système
     serait la nouvelle matrice pour une rotation autour de l'axe des Z ?
 
 
+   Reponse: 
+   On devra changer le signe de l'angle de rotation.
 
+   La nouvelle matrice otenue est la suivante:
+
+   soit theta ,l'angle de rotation
+             
+   |-cos(theta) -sin(theta) 0     0|
+   |sin(theta)  -cos(theta) 0     0|
+   | 0           0          1     0|
+   | 0           0          0     1|
 
 Q2: Dans ce TP, on peut déplacer le bonhomme avec les flèches du clavier ou
     encore lancer un déplacement « automatique » avec la touche 'espace'.
