@@ -37,9 +37,9 @@ void main( void )
 */
 
 
-    vec4 pos = matrModel * Vertex;
-	//gl_ClipDistance[0] = dot(planRayonsX, pos );
-	//gl_ClipDistance[1]=-dot(planRayonsX,pos);
+    /*vec4 pos = matrModel * Vertex;
+	gl_ClipDistance[0] = dot(planRayonsX, pos );
+	gl_ClipDistance[1]=-dot(planRayonsX,pos);*/
 
     // couleur du sommet
     AttribsOut.Color = Color;

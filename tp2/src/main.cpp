@@ -203,48 +203,14 @@ void FenetreTP::redimensionner( GLsizei w, GLsizei h )
 
 	glEnable(GL_SCISSOR_TEST);
 	
-	glScissor(0, 0, w/2, h/2);
-    //glViewport( 0, 0, w, h );
-	GLfloat w2 = 0.5*w, h2 = 0.5*h;
-	// GLfloat v[]  = {
-	//    0,  0,  w2, h2,
-	//    w2, 0,  w2, h2,
-	//    0,  h2, w2, h2,
-	//    w2, h2, w2, h2,
-	// };
-	// glViewportArrayv( 0, 4, v );
-	// glViewportIndexedf( 0,  1,  1,  W2, h2 );
-	// glScissorIndexed( 0,  1,  1,  W2, h2 );
-	
-	
-	
-	glViewport(0, 0, w, h2); // pour le viewport 0
-	glScissorIndexed(1, 0, h2, w2, h2); // pour le viewport 1
-	glViewportIndexedf(1, 0, h2, w, h2); // pour le viewport 1
-///	glScissorIndexed(1, 0, h2, w, h2);
-	//std::cout << glGet(GL_VIEWPORT);
+	glScissor(0, 0, w, h);
+  
+	GLfloat w2 = 0.5*w;
 
-	
-	//glScissor(0, 0, w/2, h/2);
-	//glViewport(w2, h2, w/3, h/3);
-	// glScissorIndexed( 0,  1,  1,  W2, h2 );
-
-
-	//glViewportIndexedf(2, w2, h2, w2/4 ,h2/4); // pour le viewport 1
-	//glScissorIndexed(2, 0, 0, w2, h);
-	//-------------------------------
-	/* GLfloat v[]  = {
-			    0, 0,  w, h2,
-			    0, h2, w, h2,
-			 };
-			 glViewportArrayv( 0, 2, v );
-			 glViewportIndexedf( 0,  1,  1,  w, h2 );
-			 glScissorIndexed( 0,  1,  1,  w, h2 );
-
-
-			 glViewportIndexedf(1, 0, h2, w/2, h2);
-			 glScissorIndexed(1, 0, h2, w/2, h2);
-	*/
+	glViewport(0, 0, w2, h); // pour le viewport 0
+    glScissorIndexed(0,0, 0, w2, h); // pour le viewport 1
+	glViewportIndexedf(1, w2, 0, w2, h); // pour le viewport 1
+    glScissorIndexed(1, w2, 0, w2, h); // pour le viewport 1
  
 }
 

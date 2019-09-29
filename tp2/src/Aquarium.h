@@ -343,7 +343,7 @@ public:
 	void selectionnerPoisson()
 	{
 		// partie 2: modifs ici ...
-		int indexpoisson=0;
+		
 		if (Etat::enSelection) {// s'assurer que toutes les opérations sont terminées
 			glFinish();// obtenir la clôture et calculer la position demandée
 			GLint cloture[4]; glGetIntegerv(GL_VIEWPORT, cloture);
@@ -357,7 +357,7 @@ public:
 
 			
 			// la couleur du pixel lu indique l'objet sélectionné
-				for( indexpoisson;indexpoisson<poissons.size();indexpoisson++){
+				for( long unsigned int indexpoisson=0;indexpoisson<poissons.size();indexpoisson++){
 					if (float(couleur[0] / 255.0) == poissons[indexpoisson]->couleurSelection.r) { 
 						
 						//poissons[indexpoisson]->estSelectionne = true; //pour garder le poisson immobile apres cliquer
