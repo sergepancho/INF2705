@@ -26,6 +26,7 @@ public:
         srand( time(NULL) );
 
         // remplir l'aquarium
+		//glm::vec3 unecouleur = glm::vec3(1.0, 0.0, 0.0);
         for ( unsigned int i = 0 ; i < sizeof(hauteur)/sizeof(hauteur[0]) ; ++i )
         {
             // donner distance aléatoire
@@ -43,8 +44,9 @@ public:
 
             // assigner une couleur de sélection
             // partie 2: modifs ici ...
-			p->couleurSelection = glm::vec3((254.0-10.0*i)/255.0, 0.0,0.0);
-			
+
+			p->couleurSelection = glm::vec3((254.0 - 10.0*i) / 255.0, 0.0, 0.0);
+
             // ajouter ce poisson dans la liste
             poissons.push_back( p );
         }
@@ -182,8 +184,6 @@ public:
     {
 		// partie 1: modifs ici ...
 
-		//glMatrixMode(ordre);
-		//glEnable(ordre);
 			 // afficher les poissons en plein et en fil de fer en tenant compte du plan de rayonsX,
 		
 			glUniform4fv(locplanRayonsX, 1, glm::value_ptr(Etat::planRayonsX));
@@ -201,13 +201,13 @@ public:
 			 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			 afficherTousLesPoissons();
 
-
 			 glDisable(GL_CLIP_PLANE1);
 
 			 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-    // afficher l'aquarium
+   
+	// afficher l'aquarium
     void afficher()
     {
         // tracer l'aquarium avec le programme de nuanceur de ce TP
@@ -340,41 +340,37 @@ public:
     }
 
     // sélectionner un poisson
-	void selectionnerPoisson()
-	{
-		// partie 2: modifs ici ...
-		
-		if (Etat::enSelection) {// s'assurer que toutes les opérations sont terminées
-			glFinish();// obtenir la clôture et calculer la position demandée
+    void selectionnerPoisson()
+    {
+        // partie 2: modifs ici ...
+		if (Etat::enSelection) {
+
+			// s'assurer que toutes les opérations sont terminées
+			glFinish();
+
+			// obtenir la clôture et calculer la position demandée
 			GLint cloture[4]; glGetIntegerv(GL_VIEWPORT, cloture);
 			GLint posX = Etat::sourisPosPrec.x, posY = cloture[3] - Etat::sourisPosPrec.y;
-			// dire de lire le tampon arrière où l'on vient  tout juste de dessiner
-			glReadBuffer(GL_BACK);// ...Sélection 3D par couleur
+
+			// dire de lire le tampon arrière où l'on vient tout juste de dessiner
+			glReadBuffer(GL_BACK);
 
 			// obtenir la couleur
 			GLubyte couleur[3];
 			glReadPixels(posX, posY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, couleur);
 
-			
 			// la couleur du pixel lu indique l'objet sélectionné
-				for( long unsigned int indexpoisson=0;indexpoisson<poissons.size();indexpoisson++){
-					if (float(couleur[0] / 255.0) == poissons[indexpoisson]->couleurSelection.r) { 
-						
-						//poissons[indexpoisson]->estSelectionne = true; //pour garder le poisson immobile apres cliquer
-
-						poissons[indexpoisson]->estSelectionne = !poissons[indexpoisson]->estSelectionne;//pour arreter ou mettre en mouvement le poisson
-						poissons[indexpoisson]->avancerPhysique();
-						break;
-					}
-					
+			for (int i = 0; i< poissons.size(); i++)
+			{
+				if (((float)(couleur[0]/255.0) == poissons[i]->couleurSelection.r)) 
+				{
+					poissons[i]->estSelectionne = !poissons[i]->estSelectionne;
+					poissons[i]->avancerPhysique();
+					break;
 				}
 
+			}
 		}
-		/*poissons[indexpoisson]->estSelectionne = false;
-		poissons[indexpoisson]->avancerPhysique();
-		indexpoisson = 0;*/
-		
-	
     }
 
     void calculerPhysique( )

@@ -11,9 +11,6 @@ public:
     Poisson( float r = 1.0, float h = 0.0, float ang = 0.0, float vit = 1.0, float tai = 0.5 )
         : rayon(r), hauteur(h), angle(ang), vitesse(vit), taille(tai)
     {
-
-		estSelectionne = false;
-		
         // créer un poisson graphique
         initialiserGraphique();
     }
@@ -43,30 +40,28 @@ public:
             // partie 2: modifs ici ...
             // donner la couleur de sélection
 			glm::vec3 coulCorps; // vert
-			glm::vec3 coulYeux;//jaune
+			glm::vec3 coulYeux; // jaune
 			if (Etat::enSelection) {
-				
-				coulCorps = this->couleurSelection;
-				coulYeux = this->couleurSelection;
-
-				
-				
-
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			coulCorps = this->couleurSelection;
+			coulYeux = this->couleurSelection;
+		     
 			}
-			else {
-				coulCorps = glm::vec3(0.0, 1.0, 0.0); // vert
-				coulYeux = glm::vec3(1.0, 1.0, 0.0); // jaune
-				
-
+			else
+			{
+				coulCorps = glm::vec3(0.0, 1.0, 0.0);
+				 coulYeux = glm::vec3(1.0, 1.0, 0.0);
 			}
+	
             // afficher le corps
             // (en utilisant le cylindre centré dans l'axe des Z, de rayon 1, entre (0,0,0) et (0,0,1))
-           // glm::vec3 coulCorps( 0.0, 1.0, 0.0 ); // vert
-            glVertexAttrib3fv( locColor, glm::value_ptr(coulCorps) );
+            // vert
 			
+            glVertexAttrib3fv( locColor, glm::value_ptr(coulCorps) );
             matrModel.PushMatrix();{
                 matrModel.Scale( 5.0*taille, taille, taille );
                 matrModel.Rotate( 90.0, 0.0, 1.0, 0.0 );
+				if (vitesse > 0.0) matrModel.Rotate(180.0, 0.0, 1.0, 0.0);
                 matrModel.Translate( 0.0, 0.0, -0.5 );
                 glUniformMatrix4fv( locmatrModel, 1, GL_FALSE, matrModel ); // ==> Avant de tracer, on doit informer la carte graphique des changements faits à la matrice de modélisation
 
@@ -94,8 +89,7 @@ public:
     {
 		if (estSelectionne == false)
 			angle += Etat::dt * vitesse;
-		
-    }
+	}
 
     // les variables du poisson
     float rayon;          // en unités
@@ -103,10 +97,8 @@ public:
     float angle;          // en degrés
     float vitesse;        // en degrés/seconde
     float taille;         // en unités
-	bool estSelectionne;
+	bool estSelectionne = false;
 	glm::vec3 couleurSelection;
-
-
 
 };
 

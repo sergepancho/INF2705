@@ -60,9 +60,7 @@
   <ItemGroup>
     <None Include="nuanceurFragments.glsl" />
     <None Include="nuanceurSommets.glsl" />
-    <None Include="nuanceurGeometrie.glsl">
-      <Filter>Nuanceurs</Filter>
-    </None>
+    <None Include="nuanceurGeometrie.glsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

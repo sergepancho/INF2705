@@ -12,37 +12,28 @@ layout(location=0) in vec4 Vertex;
 layout(location=3) in vec4 Color;
 
 out Attribs {
-
-    vec4 Color;
-
-   // vec4 couleur;
-
+    vec4 couleur;
+   float sortie1, sortie2 ;
 } AttribsOut;
 
 void main( void )
 {
     // transformation standard du sommet
     gl_Position = matrProj * matrVisu * matrModel * Vertex;
-
-
-
-/*
-	{
-        vec4 pos = matrModel * Vertex;
-		vec4 planCoupe = vec4( 1,0,0,0);
-        gl_ClipDistance[0] = dot(planCoupe, pos );
-		gl_ClipDistance[1]=-dot(planCoupe,pos);
-   }
-
-*/
-
-
-    /*vec4 pos = matrModel * Vertex;
-	gl_ClipDistance[0] = dot(planRayonsX, pos );
-	gl_ClipDistance[1]=-dot(planRayonsX,pos);*/
-
+	
+    vec4 pos = matrModel * Vertex;
+	AttribsOut.sortie1 = dot(planRayonsX, pos );
+	AttribsOut.sortie2 =-dot(planRayonsX,pos);
+   
     // couleur du sommet
-    AttribsOut.Color = Color;
+    AttribsOut.couleur = Color;
+
+	//Faire varier la couleur  des poisson du vert au bleu 
+
+	if (Color.a == 1 && Color.r == 0){
+	vec4 couleurvariable = vec4(0.0, 1.0, 1.0, 1.0); //cyan
+	AttribsOut.couleur = mix (Color , couleurvariable, Vertex.z);
+	}
 
     // atténuer selon la profondeur
     if ( attenuation == 1 )
@@ -51,8 +42,11 @@ void main( void )
         const float finAttenuation = +5.0;
         const vec4 coulAttenuation = vec4( 0.2, 0.15, 0.1, 1.0 );
 
-        // Mettre un test bidon afin que l'optimisation du compilateur n'élimine l'attribut "planRayonsX".
-        // Vous ENLEVEREZ ce test inutile!
-        if ( planRayonsX.x < -10000.0 ) AttribsOut.Color.r += 0.001;
+		if (pos.z >debAttenuation && pos.z < finAttenuation){
+		float temp = smoothstep(debAttenuation, finAttenuation, pos.z );
+		AttribsOut.couleur = mix (coulAttenuation, AttribsOut.couleur, temp);
+
+	}
+        
     }
 }

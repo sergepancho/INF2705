@@ -94,7 +94,7 @@ void chargerNuanceurs()
             ProgNuanceur::afficherLogCompile( nuanceurObj );
             delete [] chainesSommets;
         }
-#if 1
+#if 1		// 0
         // partie 2: enlever le "#if 0" pour utiliser le nuanceur de géométrie
         const GLchar *chainesGeometrie = ProgNuanceur::lireNuanceur( "nuanceurGeometrie.glsl" );
         if ( chainesGeometrie != NULL )
@@ -137,7 +137,7 @@ void FenetreTP::initialiser()
 
     // activer les états openGL
     glEnable( GL_DEPTH_TEST );
-	
+
     // activer le mélange de couleur pour la transparence
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
@@ -162,7 +162,7 @@ void FenetreTP::afficherScene( )
     glUseProgram( progBase );
 
     // définir le pipeline graphique
-    matrProj.Perspective( 50.0, (GLdouble) largeur_ / (GLdouble) hauteur_, 0.1, 100.0 );
+    matrProj.Perspective( 50.0, (GLdouble) 0.5*largeur_ / (GLdouble) hauteur_, 0.1, 100.0 );
     glUniformMatrix4fv( locmatrProjBase, 1, GL_FALSE, matrProj );
 
     camera.definir();
@@ -184,8 +184,7 @@ void FenetreTP::afficherScene( )
         aquarium->selectionnerPoisson( );
 
         // la sélection a été faite
-        //Etat::enSelection = true;
-
+       
 		Etat::enSelection = false;
         // (pas d'appel à swap(): il n'est pas pertinent de montrer ce qu'on vient de tracer pour la sélection)
 		
@@ -199,19 +198,19 @@ void FenetreTP::afficherScene( )
 
 void FenetreTP::redimensionner( GLsizei w, GLsizei h )
 {
-
-
-	glEnable(GL_SCISSOR_TEST);
+    //glViewport( 0, 0, w, h );
 	
-	glScissor(0, 0, w, h);
-  
-	GLfloat w2 = 0.5*w;
+	glEnable(GL_SCISSOR_TEST);
 
+	glScissor(0, 0, w, h);
+
+	GLfloat w2 = 0.5*w;
 	glViewport(0, 0, w2, h); // pour le viewport 0
-    glScissorIndexed(0,0, 0, w2, h); // pour le viewport 1
+
 	glViewportIndexedf(1, w2, 0, w2, h); // pour le viewport 1
-    glScissorIndexed(1, w2, 0, w2, h); // pour le viewport 1
- 
+	glScissorIndexed(1, w2, 0, w2, h); // pour le viewport 1
+
+
 }
 
 void FenetreTP::clavier( TP_touche touche )
@@ -348,23 +347,6 @@ int main( int argc, char *argv[] )
     // allouer des ressources et définir le contexte OpenGL
     fenetre.initialiser();
 
-
-	//utilisation du nuanceur de fragment
-
-	//GLfloat h2 = 0.5;
-
-
-	/*glViewportIndexedf(0,0,0,0.5,0.5);
-
-	glViewportIndexedf(1,0,0.5,0.5,0.5);
-
-
-	glScissorIndexed(0, 0, 0, 0.5, 0.5);
-
-	glScissorIndexed(1, 0, 0.5, 0.5, 0.5);*/
-
-
-	//------------------------------------
     bool boucler = true;
     while ( boucler )
     {
